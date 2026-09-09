@@ -24,7 +24,7 @@ type InPlace struct {
 
 var _ Factory = InPlace{}
 
-func (f InPlace) New(ctx context.Context) (Workspace, error) {
+func (f InPlace) New(_ context.Context) (Workspace, error) {
 	return inPlaceWS{dir: f.Source}, nil
 }
 
@@ -50,7 +50,7 @@ func (f TempCopy) New(ctx context.Context) (Workspace, error) {
 	}
 
 	if err := os.CopyFS(dir, os.DirFS(f.Source)); err != nil {
-		os.RemoveAll(dir)
+		_ = os.RemoveAll(dir)
 		return nil, fmt.Errorf("copy %s into temp dir: %w", f.Source, err)
 	}
 
